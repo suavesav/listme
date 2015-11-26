@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+<div id="output"> &nbsp; </div>
+
+<button id="test">test</button>
+
+<form>
+    Folder Id:<br>
+    <input type="text" id="test_text" size="35"><br>
+
+</form>
+
+
+</body>
+
+<script type="application/javascript">
+$(document).ready(function(){
+    $(document.getElementById('test')).click(function() {
+        var tt = $('#test_text').val();
+        $.ajax({
+            type: 'POST' ,
+            url: '{% url "listme.views.lists.lists_handler" %}',
+            datatype: 'json' ,
+            data:{
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                operation: 'test',
+                scope: 'user',
+                txt: tt
+            },
+            success: function(response) {
+                console.log(response);
+                tableData = simple_output(response);
+                $('#output').html(tableData);
+            }
+        });
+    });
+
+});
+
+function simple_output(response) {
+    var tableData = '<table>';
+    $.each(response, function (key, value) {
+        tableData += '<tr>';
+        tableData += '<td>' + key + '</td>';
+        tableData += '<td>' + value + '</td>';
+        tableData += '</tr>';
+    });
+    tableData += '</table>';
+    return tableData;
+}
+
+function output_table(response) {
+    var tableData = '<table>';
+    $.each(response, function (k, v) {
+        $.each(v, function (key, value) {
+            tableData += '<tr>';
+            tableData += '<td>' + key + '</td>';
+            tableData += '<td>' + value + '</td>';
+            tableData += '</tr>';
+        });
+    });
+    tableData += '</table>';
+    return tableData;
+}
+</script>
+</html>
+
+{#        tableData += '<tr>';#}
+{#        tableData += '<button class="delFolderButton" id="' + pk + '">Delete</button>';#}
+{#        tableData += '</tr>';#}
+{#        tableData += '<tr>';#}
+{#        tableData += '<button class="showTemplatesButton" id="' + pk + '">Show Templates</button>';#}
+{#        tableData += '</tr>';#}
+
+{#    $(".showTemplatesButton").on('click', function() {#}
+{#        alert("hello");#}
+{#        $.ajax({#}
+{#            type: 'POST' ,#}
+{#            url: '{% url "cordata.views.template.saved_templates.templates_handler" %}',#}
+{#            datatype: 'json' ,#}
+{#            data:{#}
+{#                csrfmiddlewaretoken: '{{ csrf_token }}',#}
+{#                operation: 'show-templates',#}
+{#                folder_pk: event.target.id#}
+{#            },#}
+{##}
+{#            success: function(response) {#}
+{#                console.log(response);#}
+{#                folders = response["folders"];#}
+{#                tableData = output_table(response);#}
+{#                $('#output').html(tableData);#}
+{##}
+{##}
+{#            }#}
+{#        });#}
+{#    });#}
