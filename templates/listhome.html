@@ -7,10 +7,10 @@
 <body>
 <div id="output"> &nbsp; </div>
 
-<button id="test">test</button>
+<button id="getLists">Get All Lists</button>
 
 <form>
-    Folder Id:<br>
+    Test Text:<br>
     <input type="text" id="test_text" size="35"><br>
 
 </form>
@@ -20,21 +20,18 @@
 
 <script type="application/javascript">
 $(document).ready(function(){
-    $(document.getElementById('test')).click(function() {
+    $(document.getElementById('getLists')).click(function() {
         var tt = $('#test_text').val();
         $.ajax({
-            type: 'POST' ,
-            url: '{% url "listme.views.lists.lists_handler" %}',
+            type: 'GET' ,
+            url: 'http://127.0.0.1:8000/api/lists/?format=json',
             datatype: 'json' ,
             data:{
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                operation: 'test',
-                scope: 'user',
-                txt: tt
+                csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function(response) {
                 console.log(response);
-                tableData = simple_output(response);
+                tableData = output_table(response);
                 $('#output').html(tableData);
             }
         });

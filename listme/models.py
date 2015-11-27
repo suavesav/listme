@@ -3,6 +3,7 @@ from django.db import models
 class List(models.Model):
     owner = models.ForeignKey('auth.User', related_name='lists')
     name = models.CharField(max_length=100, blank=True, default='')
+    score = models.IntegerField(default=0)
     show_list = models.BooleanField(default=True)
     is_public = models.BooleanField(default=False)
 

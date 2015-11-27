@@ -37,6 +37,17 @@ class ListList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset
+
+        if 'list_pk' in kwargs:
+            queryset=queryset.filter(pk=kwargs['list_pk'])
+        elif 'user_pk' in kwargs:
+            queryset=queryset.filter(user=kwargs['user_pk'])
+
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
 
 class ListDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = List.objects.all()
